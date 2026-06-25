@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Sistem pendaftaran peserta konferensi <strong>International Conference on Computer Engineering and Systems 2026</strong>.
+  Sistem pendaftaran peserta konferensi <strong>International Conference on Community Engagement for Sustainability 2026</strong>.
   Dibangun dengan Laravel 10, TailwindCSS v4.3, dan MySQL — desain responsif mobile-first.
 </p>
 

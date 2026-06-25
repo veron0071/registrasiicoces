@@ -38,7 +38,7 @@
                         ['Email',              $participant->email],
                         ['Phone',              $participant->phone],
                         ['Category',          ucfirst(str_replace('_', ' ', $participant->category))],
-                        ['Attendance',         ucfirst($participant->attendance)],
+                        ['Cohost',             ucfirst($participant->cohost)],
                         ['Origin',             strtoupper($participant->participant_origin)],
                         ['Registration Date',  $participant->created_at->format('d M Y H:i')],
                     ];
@@ -96,6 +96,34 @@
                         <span class="badge-rejected text-sm px-4 py-1.5">✗ Rejected</span>
                     @endif
                 </div>
+
+                <div class="border-t border-dashed border-gray-200 my-5"></div>
+
+                {{-- Send Zoom Link --}}
+                @if($participant->payment_status == 'verified')
+                <div class="mb-5">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Send Zoom Link</p>
+                    <form method="POST" action="{{ route('admin.participants.send_zoom', $participant->id) }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn-primary w-full py-2.5 text-sm" onclick="return confirm('Send Zoom link to {{ $participant->email }}?')">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                            Send Zoom Link
+                        </button>
+                    </form>
+                </div>
+                @else
+                <div class="mb-5">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Send Zoom Link</p>
+                    <button disabled class="w-full py-2.5 text-sm bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Payment Not Verified
+                    </button>
+                </div>
+                @endif
 
                 <div class="border-t border-dashed border-gray-200 my-5"></div>
 

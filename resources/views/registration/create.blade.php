@@ -26,7 +26,7 @@
             Conference <span class="text-[#d90429]">Registration</span>
         </h1>
         <p class="mt-3 text-gray-500 max-w-lg mx-auto text-[15px] leading-relaxed">
-            Join the <strong class="text-gray-700">International Conference on Computer Engineering and Systems 2026</strong>. Fill in the form below to secure your spot.
+            Join the <strong class="text-gray-700">International Conference on Community Engagement for Sustainability 2026</strong>. Fill in the form below to secure your spot.
         </p>
 
         {{-- Step Indicators --}}
@@ -88,7 +88,7 @@
 
                 {{-- Hidden inputs for card selectors --}}
                 <input type="hidden" name="category" id="category" value="{{ old('category') }}">
-                <input type="hidden" name="attendance" id="attendance" value="{{ old('attendance') }}">
+                <input type="hidden" name="cohost" id="cohost" value="{{ old('cohost') }}">
                 <input type="hidden" name="participant_origin" id="participant_origin" value="{{ old('participant_origin') }}">
 
                 {{-- ============================================================ --}}
@@ -142,35 +142,39 @@
                             </div>
                         </div>
 
-                        {{-- Country & Email --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="form-label" for="country">
-                                    Country <span class="text-[#d90429]">*</span>
-                                </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                        <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </div>
-                                    <input type="text" id="country" name="country" class="form-input pl-11"
-                                           placeholder="e.g. Indonesia" value="{{ old('country') }}" required>
+                        {{-- Country --}}
+                        <div>
+                            <label class="form-label" for="country">
+                                Country <span class="text-[#d90429]">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                    <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
                                 </div>
+                                <select id="country" name="country" class="form-input pl-11" required>
+                                    <option value="">Select your country</option>
+                                    @foreach(config('countries') as $code => $name)
+                                        <option value="{{ $name }}" {{ old('country') == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div>
-                                <label class="form-label" for="email">
-                                    Email Address <span class="text-[#d90429]">*</span>
-                                </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                        <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                        </svg>
-                                    </div>
-                                    <input type="email" id="email" name="email" class="form-input pl-11"
-                                           placeholder="you@university.edu" value="{{ old('email') }}" required>
+                        </div>
+
+                        {{-- Email --}}
+                        <div>
+                            <label class="form-label" for="email">
+                                Email Address <span class="text-[#d90429]">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                    <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
                                 </div>
+                                <input type="email" id="email" name="email" class="form-input pl-11"
+                                       placeholder="you@university.edu" value="{{ old('email') }}" required>
                             </div>
                         </div>
 
@@ -222,6 +226,49 @@
 
                     <div class="px-4 sm:px-8 pb-8 space-y-6">
 
+                        {{-- Cohost --}}
+                        <div>
+                            <label class="form-label mb-3 block">
+                                Cohost Participation <span class="text-[#d90429]">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-3" id="cohost_group">
+                                <button type="button" data-group="cohost" data-value="yes"
+                                    class="option-card {{ old('cohost') == 'yes' ? 'option-card--active' : '' }}">
+                                    <div class="option-card__icon bg-purple-50 text-purple-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="text-left min-w-0">
+                                        <p class="font-semibold text-gray-800 text-sm">Yes</p>
+                                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Presenter with cohost — Rp 250.000</p>
+                                    </div>
+                                    <div class="option-card__check">
+                                        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                </button>
+                                <button type="button" data-group="cohost" data-value="no"
+                                    class="option-card {{ old('cohost') == 'no' ? 'option-card--active' : '' }}">
+                                    <div class="option-card__icon bg-amber-50 text-amber-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="text-left min-w-0">
+                                        <p class="font-semibold text-gray-800 text-sm">No</p>
+                                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Solo presenter — Rp 300.000</p>
+                                    </div>
+                                    <div class="option-card__check">
+                                        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
                         {{-- Category --}}
                         <div>
                             <label class="form-label mb-3 block">
@@ -255,50 +302,6 @@
                                     <div class="text-left min-w-0">
                                         <p class="font-semibold text-gray-800 text-sm">Non-Presenter</p>
                                         <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Attend as participant</p>
-                                    </div>
-                                    <div class="option-card__check">
-                                        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-
-                        {{-- Attendance --}}
-                        <div>
-                            <label class="form-label mb-3 block">
-                                Attendance Mode <span class="text-[#d90429]">*</span>
-                            </label>
-                            <div class="grid grid-cols-2 gap-3" id="attendance_group">
-                                <button type="button" data-group="attendance" data-value="onsite"
-                                    class="option-card {{ old('attendance') == 'onsite' ? 'option-card--active' : '' }}">
-                                    <div class="option-card__icon bg-emerald-50 text-emerald-600">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="text-left min-w-0">
-                                        <p class="font-semibold text-gray-800 text-sm">On-site</p>
-                                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Attend in person at venue</p>
-                                    </div>
-                                    <div class="option-card__check">
-                                        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                </button>
-                                <button type="button" data-group="attendance" data-value="online"
-                                    class="option-card {{ old('attendance') == 'online' ? 'option-card--active' : '' }}">
-                                    <div class="option-card__icon bg-violet-50 text-violet-600">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="text-left min-w-0">
-                                        <p class="font-semibold text-gray-800 text-sm">Online</p>
-                                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Join via live stream</p>
                                     </div>
                                     <div class="option-card__check">
                                         <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -466,11 +469,11 @@
                             <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Registration Summary</p>
                             <div class="space-y-2 text-sm" id="summary-box">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500">Category</span>
+                                    <span class="text-gray-500">Cohost</span>
                                     <span class="font-medium text-gray-800" id="summary-category">—</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500">Attendance</span>
+                                    <span class="text-gray-500">Category</span>
                                     <span class="font-medium text-gray-800" id="summary-attendance">—</span>
                                 </div>
                                 <div class="flex justify-between">
@@ -522,7 +525,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const categoryInput = document.getElementById('category');
-        const attendanceInput = document.getElementById('attendance');
+        const cohostInput = document.getElementById('cohost');
         const originInput = document.getElementById('participant_origin');
         const paperTitleContainer = document.getElementById('paper_title_container');
         const paperTitleInput = document.getElementById('paper_title');
@@ -547,10 +550,10 @@
                     }
                 }
                 if (currentStep === 2) {
-                    if (!categoryInput.value || !attendanceInput.value || !originInput.value) {
+                    if (!cohostInput?.value || !categoryInput?.value || !originInput?.value) {
                         return; // silent — user must select all options
                     }
-                    if (categoryInput.value === 'presenter' && !paperTitleInput.value.trim()) {
+                    if (categoryInput.value === 'presenter' && !paperTitleInput?.value.trim()) {
                         paperTitleInput.focus();
                         return;
                     }
@@ -594,11 +597,12 @@
                 });
                 this.classList.add('option-card--active');
 
-                if (group === 'category') {
+                if (group === 'cohost') {
+                    cohostInput.value = value;
+                    calculateFee();
+                } else if (group === 'category') {
                     categoryInput.value = value;
                     togglePaperTitle();
-                } else if (group === 'attendance') {
-                    attendanceInput.value = value;
                 } else if (group === 'participant_origin') {
                     originInput.value = value;
                     calculateFee();
@@ -621,6 +625,7 @@
         function calculateFee() {
             const category = categoryInput.value;
             const origin = originInput.value;
+            const cohost = cohostInput.value;
 
             if (!category || !origin) {
                 feeContainer.classList.add('hidden');
@@ -628,10 +633,15 @@
             }
 
             let fee = '';
-            if (category === 'presenter' && origin === 'ina') fee = 'Rp 350.000';
-            else if (category === 'presenter' && origin === 'intl') fee = 'USD 25';
-            else if (category === 'non_presenter' && origin === 'ina') fee = 'Rp 150.000';
-            else if (category === 'non_presenter' && origin === 'intl') fee = 'USD 10';
+            if (category === 'presenter' && origin === 'ina') {
+                fee = cohost === 'yes' ? 'Rp 250.000' : 'Rp 300.000';
+            } else if (category === 'presenter' && origin === 'intl') {
+                fee = 'USD 25';
+            } else if (category === 'non_presenter' && origin === 'ina') {
+                fee = 'Rp 100.000';
+            } else if (category === 'non_presenter' && origin === 'intl') {
+                fee = 'USD 10';
+            }
 
             if (fee) {
                 feeAmountText.textContent = fee;
@@ -675,11 +685,11 @@
         function updateSummary() {
             const labels = {
                 presenter: 'Presenter', non_presenter: 'Non-Presenter',
-                onsite: 'On-site', online: 'Online',
-                ina: 'Domestic (INA)', intl: 'International'
+                ina: 'Domestic (INA)', intl: 'International',
+                yes: 'Yes (Cohost)', no: 'No (Solo)'
             };
             document.getElementById('summary-category').textContent = labels[categoryInput.value] || '—';
-            document.getElementById('summary-attendance').textContent = labels[attendanceInput.value] || '—';
+            document.getElementById('summary-attendance').textContent = labels[cohostInput.value] || '—';
             document.getElementById('summary-origin').textContent = labels[originInput.value] || '—';
             document.getElementById('summary-fee').textContent = feeAmountText.textContent || '—';
         }
@@ -692,7 +702,7 @@
         @if($errors->any())
             @if($errors->has('full_name') || $errors->has('institution') || $errors->has('country') || $errors->has('email') || $errors->has('phone'))
                 goToStep(1);
-            @elseif($errors->has('category') || $errors->has('attendance') || $errors->has('participant_origin') || $errors->has('paper_title'))
+            @elseif($errors->has('cohost') || $errors->has('category') || $errors->has('participant_origin') || $errors->has('paper_title'))
                 goToStep(2);
             @else
                 goToStep(3);

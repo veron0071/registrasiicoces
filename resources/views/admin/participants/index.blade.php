@@ -10,26 +10,36 @@
         <h1 class="text-2xl font-bold text-gray-900">Participants</h1>
         <p class="text-gray-500 text-sm mt-0.5">Manage and review all registered participants.</p>
     </div>
-    <div class="flex items-center gap-2">
-        <a href="{{ route('admin.export.excel', request()->all()) }}"
-           class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+    <form method="POST" action="{{ route('admin.participants.send_zoom_all') }}" onsubmit="return confirm('Send Zoom link to ALL verified participants based on current filters?')">
+        @csrf
+        <button type="submit" style="background-color: #7c3aed; color: white;" class="flex items-center gap-2 hover:bg-violet-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-md">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
-            Excel
-        </a>
-        <a href="{{ route('admin.export.csv', request()->all()) }}"
-           class="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-            CSV
-        </a>
-    </div>
+            Send Zoom to All
+        </button>
+    </form>
+</div>
+
+<div class="flex items-center justify-end gap-2 mb-4">
+    <a href="{{ route('admin.export.excel', request()->all()) }}"
+       class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        Excel
+    </a>
+    <a href="{{ route('admin.export.csv', request()->all()) }}"
+       class="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        CSV
+    </a>
 </div>
 
 {{-- Filter Card (collapsible on mobile) --}}
-@php $hasActiveFilters = request()->anyFilled(['search','category','attendance','payment_status','participant_origin','country']); @endphp
+@php $hasActiveFilters = request()->anyFilled(['search','category','cohost','payment_status','participant_origin','country']); @endphp
 <div class="card mb-5">
 
     {{-- Header — clickable toggle on mobile, static on md+ --}}
@@ -43,7 +53,7 @@
             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wide">Filter Participants</h3>
             @if($hasActiveFilters)
                 <span class="inline-flex items-center justify-center w-5 h-5 bg-[#d90429] text-white text-xs font-bold rounded-full">
-                    {{ count(array_filter(request()->only(['search','category','attendance','payment_status','participant_origin','country']))) }}
+                    {{ count(array_filter(request()->only(['search','category','cohost','payment_status','participant_origin','country']))) }}
                 </span>
             @endif
             {{-- Spinning loader (hidden by default) --}}
@@ -94,13 +104,13 @@
                     </select>
                 </div>
 
-                {{-- Attendance --}}
+                {{-- Cohost --}}
                 <div>
-                    <label class="form-label">Attendance</label>
-                    <select name="attendance" class="form-select auto-filter">
+                    <label class="form-label">Cohost</label>
+                    <select name="cohost" class="form-select auto-filter">
                         <option value="">All</option>
-                        <option value="onsite" {{ request('attendance') == 'onsite' ? 'selected' : '' }}>On-site</option>
-                        <option value="online" {{ request('attendance') == 'online' ? 'selected' : '' }}>Online</option>
+                        <option value="yes" {{ request('cohost') == 'yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="no" {{ request('cohost') == 'no' ? 'selected' : '' }}>No</option>
                     </select>
                 </div>
 
@@ -130,8 +140,8 @@
                     <label class="form-label">Country</label>
                     <select name="country" class="form-select auto-filter">
                         <option value="">All</option>
-                        @foreach($countries as $country)
-                            <option value="{{ $country }}" {{ request('country') == $country ? 'selected' : '' }}>{{ $country }}</option>
+                        @foreach(config('countries') as $code => $name)
+                            <option value="{{ $name }}" {{ request('country') == $name ? 'selected' : '' }}>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>

@@ -20,6 +20,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/participants', [AdminController::class, 'participants'])->name('admin.participants');
         Route::get('/participants/{participant}', [AdminController::class, 'show'])->name('admin.participants.show');
         Route::patch('/participants/{participant}/payment', [AdminController::class, 'updatePaymentStatus'])->name('admin.participants.update_payment');
+        Route::post('/participants/{participant}/send-zoom', [AdminController::class, 'sendZoomLink'])->name('admin.participants.send_zoom');
+        Route::post('/participants/send-zoom-all', [AdminController::class, 'sendZoomLinkToAll'])->name('admin.participants.send_zoom_all');
         
         Route::get('/export/excel', [AdminController::class, 'exportExcel'])->name('admin.export.excel');
         Route::get('/export/csv', [AdminController::class, 'exportCsv'])->name('admin.export.csv');

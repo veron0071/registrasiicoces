@@ -65,8 +65,8 @@ class AdminController extends Controller
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
-        if ($request->filled('attendance')) {
-            $query->where('attendance', $request->attendance);
+        if ($request->filled('cohost')) {
+            $query->where('cohost', $request->cohost);
         }
         if ($request->filled('payment_status')) {
             $query->where('payment_status', $request->payment_status);
@@ -84,14 +84,7 @@ class AdminController extends Controller
         // Apply pagination
         $participants = $query->latest()->paginate(10)->withQueryString();
 
-        // Fetch distinct country list from database
-        $countries = Participant::whereNotNull('country')
-            ->where('country', '!=', '')
-            ->distinct()
-            ->orderBy('country', 'asc')
-            ->pluck('country');
-
-        return view('admin.participants.index', compact('participants', 'countries'));
+        return view('admin.participants.index', compact('participants'));
     }
 
     public function show(Participant $participant)
@@ -116,6 +109,62 @@ class AdminController extends Controller
         return back()->with('success', 'Payment status updated successfully.');
     }
 
+    public function sendZoomLink(Participant $participant)
+    {
+        if ($participant->payment_status !== 'verified') {
+            return back()->with('error', 'Participant must have verified payment to receive Zoom link.');
+        }
+
+        try {
+            Mail::to($participant->email)->send(new \App\Mail\ZoomLinkMail($participant));
+            return back()->with('success', 'Zoom link sent successfully to ' . $participant->email);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to send Zoom link: ' . $e->getMessage());
+        }
+    }
+
+    public function sendZoomLinkToAll(Request $request)
+    {
+        $query = Participant::where('payment_status', 'verified');
+
+        // Apply same filters as participants list
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+        if ($request->filled('cohost')) {
+            $query->where('cohost', $request->cohost);
+        }
+        if ($request->filled('participant_origin')) {
+            $query->where('participant_origin', $request->participant_origin);
+        }
+        if ($request->filled('country')) {
+            $query->where('country', $request->country);
+        }
+        if ($request->filled('search')) {
+            $query->where('full_name', 'like', '%' . $request->search . '%');
+        }
+
+        $participants = $query->get();
+
+        if ($participants->isEmpty()) {
+            return back()->with('error', 'No verified participants found to send Zoom links.');
+        }
+
+        $sentCount = 0;
+        $failedCount = 0;
+
+        foreach ($participants as $participant) {
+            try {
+                Mail::to($participant->email)->send(new \App\Mail\ZoomLinkMail($participant));
+                $sentCount++;
+            } catch (\Exception $e) {
+                $failedCount++;
+            }
+        }
+
+        return back()->with('success', "Zoom links sent: {$sentCount} successful, {$failedCount} failed.");
+    }
+
     public function exportExcel(Request $request)
     {
         return $this->export($request, 'xlsx');
@@ -133,8 +182,8 @@ class AdminController extends Controller
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
-        if ($request->filled('attendance')) {
-            $query->where('attendance', $request->attendance);
+        if ($request->filled('cohost')) {
+            $query->where('cohost', $request->cohost);
         }
         if ($request->filled('payment_status')) {
             $query->where('payment_status', $request->payment_status);
@@ -164,7 +213,7 @@ class AdminController extends Controller
                 'Email' => $p->email,
                 'Phone' => $p->phone,
                 'Category' => $p->category,
-                'Attendance' => $p->attendance,
+                'Cohost' => $p->cohost,
                 'Origin' => $p->participant_origin,
                 'Fee Amount' => $p->fee_amount,
                 'Fee Currency' => $p->fee_currency,

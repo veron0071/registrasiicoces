@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ICoCES-2026 - International Conference on Computer Engineering and Systems. Register now for the conference.">
+    <meta name="description" content="ICoCES-2026 - International Conference on Community Engagement for Sustainability. Register now for the conference.">
     <title>@yield('title', 'ICoCES-2026 Registration')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -57,7 +57,7 @@
                 </div>
                 <span>&copy; {{ date('Y') }} ICoCES. All rights reserved.</span>
             </div>
-            <span class="text-gray-400 text-xs">International Conference on Computer Engineering and Systems</span>
+            <span class="text-gray-400 text-xs">International Conference on Community Engagement for Sustainability</span>
         </div>
     </div>
 </footer>

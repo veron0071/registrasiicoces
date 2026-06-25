@@ -22,19 +22,20 @@ class RegistrationController extends Controller
             'country' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:participants,email',
             'phone' => 'required|string|min:10|max:30',
+            'cohost' => 'required|in:yes,no',
             'category' => 'required|in:presenter,non_presenter',
-            'attendance' => 'required|in:onsite,online',
             'participant_origin' => 'required|in:ina,intl',
             'paper_title' => 'required_if:category,presenter|nullable|string|max:255',
             'payment_proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
+        $isCohost = $request->cohost === 'yes';
         $feeAmount = 0;
         $feeCurrency = 'IDR';
 
         if ($request->category === 'presenter') {
             if ($request->participant_origin === 'ina') {
-                $feeAmount = 350000;
+                $feeAmount = $isCohost ? 250000 : 300000;
                 $feeCurrency = 'IDR';
             } else {
                 $feeAmount = 25;
@@ -42,7 +43,7 @@ class RegistrationController extends Controller
             }
         } else {
             if ($request->participant_origin === 'ina') {
-                $feeAmount = 150000;
+                $feeAmount = 100000;
                 $feeCurrency = 'IDR';
             } else {
                 $feeAmount = 10;
@@ -51,9 +52,6 @@ class RegistrationController extends Controller
         }
 
         $certificateEligible = false;
-        if ($request->category === 'non_presenter' && $request->attendance === 'onsite') {
-            $certificateEligible = true;
-        }
 
         $paymentProofPath = $request->file('payment_proof')->store('payments', 'public');
 
@@ -63,8 +61,8 @@ class RegistrationController extends Controller
             'country' => $request->country,
             'email' => $request->email,
             'phone' => $request->phone,
+            'cohost' => $request->cohost,
             'category' => $request->category,
-            'attendance' => $request->attendance,
             'participant_origin' => $request->participant_origin,
             'paper_title' => $request->category === 'presenter' ? $request->paper_title : null,
             'fee_amount' => $feeAmount,
