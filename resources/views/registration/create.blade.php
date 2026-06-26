@@ -241,7 +241,7 @@
                                     </div>
                                     <div class="text-left min-w-0">
                                         <p class="font-semibold text-gray-800 text-sm">Yes</p>
-                                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Presenter with cohost — Rp 250.000</p>
+                                        
                                     </div>
                                     <div class="option-card__check">
                                         <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -258,7 +258,7 @@
                                     </div>
                                     <div class="text-left min-w-0">
                                         <p class="font-semibold text-gray-800 text-sm">No</p>
-                                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Solo presenter — Rp 300.000</p>
+                                        
                                     </div>
                                     <div class="option-card__check">
                                         <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
